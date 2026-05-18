@@ -7,8 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
-        "laravel/framework": "^13.7",
-        "laravel/tinker": "^3.0"
+        "dedoc/scramble": "^0.13.23",
+        "laravel/framework": "~13.6.0",
+        "laravel/tinker": "^3.0",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

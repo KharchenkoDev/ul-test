@@ -18,12 +18,15 @@ RUN install-php-extensions \
     bcmath \
     opcache \
     pcntl \
+    sockets \
     intl
 
-RUN apk add --no-cache $PHPIZE_DEPS \
+# redis — PECL, ставим отдельно: install-php-extensions перемещает его в конец
+# после intl, которая пурджит autoconf. Явный список пакетов надёжнее $PHPIZE_DEPS.
+RUN apk add --no-cache autoconf gcc g++ make linux-headers musl-dev \
     && pecl install redis \
     && docker-php-ext-enable redis \
-    && apk del --no-cache $PHPIZE_DEPS
+    && { apk del --no-cache autoconf gcc g++ make linux-headers musl-dev 2>/dev/null || true; }
 
 COPY docker/php/php.ini      /usr/local/etc/php/conf.d/99-custom.ini
 COPY docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/zz-custom.conf
