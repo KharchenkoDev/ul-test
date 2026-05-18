@@ -13,6 +13,8 @@ class Notification extends Model
 {
     use HasUuids;
 
+    protected $hidden = ['idempotency_key'];
+
     protected $fillable = [
         'idempotency_key',
         'subscriber_id',
@@ -59,6 +61,10 @@ class Notification extends Model
 
     public function markAsSent(): void
     {
+        if ($this->status !== NotificationStatus::Queued) {
+            return;
+        }
+
         $this->update([
             'status'  => NotificationStatus::Sent,
             'sent_at' => now(),
@@ -67,6 +73,10 @@ class Notification extends Model
 
     public function markAsDelivered(): void
     {
+        if ($this->status !== NotificationStatus::Sent) {
+            return;
+        }
+
         $this->update([
             'status'       => NotificationStatus::Delivered,
             'delivered_at' => now(),
@@ -75,6 +85,10 @@ class Notification extends Model
 
     public function markAsRejected(string $reason = ''): void
     {
+        if (!in_array($this->status, [NotificationStatus::Queued, NotificationStatus::Sent], true)) {
+            return;
+        }
+
         $this->update([
             'status'        => NotificationStatus::Rejected,
             'error_message' => $reason,
