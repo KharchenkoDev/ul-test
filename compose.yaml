@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: dev
-    command: php artisan queue:work --queue=transactional,marketing --tries=3 --sleep=3
+    command: php artisan queue:work --queue=notifications --tries=3 --sleep=3
     volumes:
       - ./src:/var/www/html
     depends_on:
