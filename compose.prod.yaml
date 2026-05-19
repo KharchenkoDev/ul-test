@@ -2,16 +2,20 @@ services:
   php:
     build:
       target: prod
-    volumes: []
+    volumes: !reset []
 
   worker:
     build:
       target: prod
-    volumes: []
+    volumes: !reset []
 
   nginx:
+    ports: !reset []
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - default
+      - proxy
 
   postgres:
     ports: []
@@ -22,3 +26,7 @@ services:
   rabbitmq:
     ports:
       - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+
+networks:
+  proxy:
+    external: true
