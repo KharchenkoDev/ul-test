@@ -17,7 +17,7 @@ ARTISAN  = $(PHP) artisan
 .DEFAULT_GOAL := help
 .PHONY: help install build up down stop start restart shell shell-worker logs ps permissions \
         composer composer-install artisan key-generate migrate migrate-fresh \
-        prod-up prod-down
+        test prod-up prod-down
 
 ## —— 🐘 Laravel Docker Makefile ———————————————————————————————————————————————
 help: ## Вывести эту справку
@@ -90,6 +90,10 @@ migrate: ## Выполнить миграции
 
 migrate-fresh: ## Сбросить БД и накатить миграции с сидерами
 	@$(ARTISAN) migrate:fresh --seed
+
+## —— Testing ——————————————————————————————————————————————————————————————————
+test: ## Запустить все тесты
+	@$(ARTISAN) test
 
 ## —— Production ———————————————————————————————————————————————————————————————
 prod-up: ## Запустить в production-режиме (target=prod, --build)
