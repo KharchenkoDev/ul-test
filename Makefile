@@ -27,6 +27,8 @@ help: ## Вывести эту справку
 install: ## Полная установка для dev-режима; безопасно повторять на уже инициализированном проекте
 	@test -f .env     || (cp .env.example .env         && echo "Создан .env (infrastructure)")
 	@test -f src/.env || (cp src/.env.example src/.env && echo "Создан src/.env (application)")
+	@grep -q "^UID=" .env || echo "UID=$$(id -u)" >> .env
+	@grep -q "^GID=" .env || echo "GID=$$(id -g)" >> .env
 	@$(DOCKER_COMP) build
 	@$(DOCKER_COMP) up --detach --wait
 	@$(MAKE) permissions --no-print-directory

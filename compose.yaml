@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: dev
+    user: "${UID}:${GID}"
     volumes:
       - ./src:/var/www/html
     depends_on:
@@ -21,6 +22,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: dev
+    user: "${UID}:${GID}"
     command: php artisan queue:work --queue=notifications --tries=3 --sleep=3
     volumes:
       - ./src:/var/www/html
